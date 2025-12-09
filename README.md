@@ -1,6 +1,6 @@
 # TrustbankCo Private Wealth
 
-A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security simulation, responsive design, and AI integration.
+A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security [...]
 
 ## 🚀 Features
 
@@ -37,6 +37,8 @@ npm run start
 ```
 *Note: The start command uses `vite preview` with `$PORT` binding for compatibility with cloud hosts.*
 
+Live demo: [TrustBankCo — Production](https://trustbank-co.vercel.app/)
+
 ### Backend Deployment
 Run the following commands in the `trustbankco-backend` directory (if separate) or `backend` folder:
 
@@ -63,7 +65,7 @@ src/
  ├── constants.ts      # Mock Data & Configuration
  ├── App.tsx           # Main Router & State
  └── index.tsx         # Entry Point
-backend/
+ backend/
  ├── prisma/           # Database Schema (schema.prisma)
  └── package.json      # Backend Dependencies
 ```
