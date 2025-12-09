@@ -3,6 +3,7 @@ import { Send, Bot, User, Sparkles } from 'lucide-react';
 import { Transaction, ChatMessage } from '../types';
 import { createFinancialChat, sendMessageToAdvisor } from '../services/geminiService';
 import { Chat } from '@google/genai';
+import Tooltip from './ui/Tooltip';
 
 interface AIChatProps {
   transactions: Transaction[];
@@ -140,13 +141,15 @@ const AIChat: React.FC<AIChatProps> = ({ transactions }) => {
             placeholder="Ask about your portfolio, e.g., 'How much did I spend on travel?'"
             className="w-full pl-4 pr-12 py-3 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-orange-500 focus:bg-slate-900 transition-all outline-none text-white placeholder-slate-500"
           />
-          <button 
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading}
-            className="absolute right-2 p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+          <Tooltip content="Send Message" position="top">
+            <button 
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading}
+              className="absolute right-2 p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </Tooltip>
         </div>
         <p className="text-center text-xs text-slate-500 mt-2">
           TrustBot may make mistakes. Please check important info.
