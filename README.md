@@ -1,4 +1,4 @@
-# TrustBank Private Wealth - Frontend
+# TrustbankCo Private Wealth
 
 A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security simulation, responsive design, and AI integration.
 
@@ -28,20 +28,20 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 ## 🛠️ Setup & Deployment Instructions
 
 ### Frontend Deployment
-Run the following commands in the root directory (or `trustbank-frontend` context):
+Run the following commands in the root directory (or `trustbankco` context):
 
 ```bash
-cd trustbank-frontend
+cd trustbankco
 npm run build
 npm run start
 ```
 *Note: The start command uses `vite preview` with `$PORT` binding for compatibility with cloud hosts.*
 
 ### Backend Deployment
-Run the following commands in the `trustbank-backend` directory (if separate) or `backend` folder:
+Run the following commands in the `trustbankco-backend` directory (if separate) or `backend` folder:
 
 ```bash
-cd trustbank-backend
+cd trustbankco-backend
 npm run build
 npm run postbuild
 npm run start
@@ -69,4 +69,4 @@ backend/
 ```
 
 ---
-*© 2024 TrustBank Private Wealth. All rights reserved.*
+*© 2024 TrustbankCo. All rights reserved.*
