@@ -1,5 +1,9 @@
 # TrustbankCo Private Wealth
 
+[![Live Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://trustbank-co.vercel.app/)
+
+Live demo: [TrustBankCo — Production](https://trustbank-co.vercel.app/)
+
 A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security [...]
 
 ## 🚀 Features
@@ -24,6 +28,11 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 - **2FA Integration**: Google Authenticator (TOTP) support with inline QR code generation.
 - **Session Management**: Auto-timeout and secure routing (simulated).
 - **Tech Stack**: React 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts.
+
+## Try it
+- Open the live demo: https://trustbank-co.vercel.app/
+- Demo credentials: Email: Howardwoods7@gmail.com / Password: DemoPass123
+- Note: These credentials are publicly visible in this README.
 
 ## 🛠️ Setup & Deployment Instructions
 
