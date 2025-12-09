@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, PieChart, ArrowRightLeft, MessageSquareText, LogOut, Landmark, Menu, X, Settings, Bell } from 'lucide-react';
+import { Home, PieChart, ArrowRightLeft, MessageSquareText, LogOut, Landmark, Menu, X, Settings, Bell, Receipt } from 'lucide-react';
 import { User, NavItem } from '../types';
 import Tooltip from './ui/Tooltip';
 
@@ -13,6 +13,7 @@ interface LayoutProps {
 const NAV_ITEMS: NavItem[] = [
   { label: 'Portfolio Overview', path: '/', icon: Home },
   { label: 'Wealth Reports', path: '/transactions', icon: PieChart },
+  { label: 'Receipts Center', path: '/receipts', icon: Receipt },
   { label: 'Wire & Transfer', path: '/transfer', icon: ArrowRightLeft },
   { label: 'Private Advisor', path: '/advisor', icon: MessageSquareText },
 ];
@@ -76,7 +77,10 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                <p className="text-[10px] text-orange-400 uppercase tracking-wider font-bold truncate mt-0.5">Chairman's Circle</p>
              </div>
              <Tooltip content="Settings">
-               <button className="text-slate-500 hover:text-white transition-colors">
+               <button 
+                onClick={() => handleNav('/settings')}
+                className="text-slate-500 hover:text-white transition-colors"
+               >
                   <Settings className="w-5 h-5" />
                </button>
              </Tooltip>
@@ -98,6 +102,8 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
           <h2 className="text-xl font-bold text-white tracking-tight font-bank">
             {location.pathname === '/' ? 'Portfolio Dashboard' : 
              location.pathname.startsWith('/account/') ? 'Account Details' :
+             location.pathname.startsWith('/receipt') ? 'Transaction Record' :
+             location.pathname.startsWith('/settings') ? 'Security Preferences' :
              NAV_ITEMS.find(i => i.path === location.pathname)?.label}
           </h2>
           <div className="flex items-center space-x-6">

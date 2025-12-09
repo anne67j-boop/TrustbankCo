@@ -299,7 +299,11 @@ const Dashboard: React.FC<DashboardProps> = ({ transactions, accounts }) => {
                   </thead>
                   <tbody className="divide-y divide-slate-800">
                     {transactions.slice(0, 5).map(t => (
-                      <tr key={t.id} className="hover:bg-slate-800/50 transition-colors group cursor-pointer">
+                      <tr 
+                        key={t.id} 
+                        onClick={() => navigate(`/receipt/${t.id}`)}
+                        className="hover:bg-slate-800/50 transition-colors group cursor-pointer"
+                      >
                         <td className="px-6 py-4 text-slate-300 font-medium whitespace-nowrap text-sm">{t.date}</td>
                         <td className="px-6 py-4">
                           <div className="font-bold text-white text-sm md:text-base truncate max-w-[140px] sm:max-w-none">{t.description}</div>

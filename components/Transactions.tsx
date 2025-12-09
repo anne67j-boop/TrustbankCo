@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Transaction } from '../types';
 import { Search, Filter, Download, ArrowUpRight, ArrowDownLeft, Calendar, ArrowUpDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Skeleton from './ui/Skeleton';
 import Tooltip from './ui/Tooltip';
 
@@ -9,6 +10,7 @@ interface TransactionsProps {
 }
 
 const Transactions: React.FC<TransactionsProps> = ({ transactions }) => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -31,12 +33,6 @@ const Transactions: React.FC<TransactionsProps> = ({ transactions }) => {
     const matchesSearch = t.description.toLowerCase().includes(searchLower) ||
                           (t.merchant && t.merchant.toLowerCase().includes(searchLower)) ||
                           t.category.toLowerCase().includes(searchLower);
-    
-    // Parse transaction date (Assuming format 'Oct 25' implies current year, effectively mocking '2024')
-    // In a real app, t.date would be an ISO string or Date object. 
-    // For this mock, we skip complex date parsing if string is just 'Oct 25', 
-    // but if user inputs date, we should try to match.
-    // For simplicity in this mock upgrade, we'll only filter if date is ISO-like or user inputs match string.
     
     return matchesFilter && matchesSearch;
   }).sort((a, b) => {
@@ -155,7 +151,11 @@ const Transactions: React.FC<TransactionsProps> = ({ transactions }) => {
             </thead>
             <tbody className="divide-y divide-slate-800">
               {filtered.length > 0 ? filtered.map((t) => (
-                <tr key={t.id} className="hover:bg-slate-800/60 transition-colors group cursor-pointer">
+                <tr 
+                  key={t.id} 
+                  onClick={() => navigate(`/receipt/${t.id}`)}
+                  className="hover:bg-slate-800/60 transition-colors group cursor-pointer"
+                >
                   <td className="px-8 py-5 whitespace-nowrap font-semibold text-slate-400 text-base">{t.date}</td>
                   <td className="px-8 py-5">
                     <div className="flex items-center">

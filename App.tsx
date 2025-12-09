@@ -8,6 +8,9 @@ import AIChat from './components/AIChat';
 import Login from './components/Login';
 import AccountDetails from './components/AccountDetails';
 import LinkAccount from './components/LinkAccount';
+import Receipt from './components/Receipt';
+import Receipts from './components/Receipts';
+import Settings from './components/Settings';
 import { CURRENT_USER, MOCK_TRANSACTIONS, MOCK_ACCOUNTS } from './constants';
 import { Construction, ArrowLeft } from 'lucide-react';
 import { Account, Transaction } from './types';
@@ -147,6 +150,26 @@ const App: React.FC = () => {
           </ProtectedRoute>
         } />
 
+        {/* Receipt Routes */}
+        <Route path="/receipts" element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+            <Receipts transactions={transactions} />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/receipt/:transactionId" element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+            <Receipt transactions={transactions} accounts={accounts} />
+          </ProtectedRoute>
+        } />
+
+        {/* Settings Route */}
+        <Route path="/settings" element={
+          <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
+            <Settings />
+          </ProtectedRoute>
+        } />
+
         {/* Quick Action Routes */}
         <Route path="/pay" element={
           <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
@@ -180,15 +203,6 @@ const App: React.FC = () => {
             <ServicePlaceholder 
               title="Card Management" 
               description="Configure spending limits, travel notices, and request metal replacement cards."
-            />
-          </ProtectedRoute>
-        } />
-
-        <Route path="/settings" element={
-          <ProtectedRoute isAuthenticated={isAuthenticated} onLogout={handleLogout}>
-            <ServicePlaceholder 
-              title="Client Settings" 
-              description="Manage security preferences, trusted devices, and authorized user access."
             />
           </ProtectedRoute>
         } />
