@@ -1,12 +1,18 @@
 # TrustbankCo Private Wealth
 
-[![Live Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://trustbank-co.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-orange?style=for-the-badge&logo=vercel)](https://trustbank-co.vercel.app/)
 
-Live demo: [TrustBankCo — Production](https://trustbank-co.vercel.app/)
+A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security simulation, responsive design, and AI integration.
 
-A high-performance, secure, and aesthetically polished banking dashboard designed for high-net-worth individuals. This application demonstrates a modern React architecture with a focus on security [...]
+## 🚀 Try it Live
 
-## 🚀 Features
+**Live URL:** [https://trustbank-co.vercel.app/](https://trustbank-co.vercel.app/)
+
+To experience the full dashboard persona:
+*   **User ID:** `hwoods7@gmail.com`
+*   **Password:** `Jenny12345`
+
+## ✨ Features
 
 ### 🏦 Private Wealth Dashboard
 - **Aggregated Portfolio View**: Real-time visualization of assets across Checking, Savings, and Credit lines.
@@ -29,11 +35,6 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 - **Session Management**: Auto-timeout and secure routing (simulated).
 - **Tech Stack**: React 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts.
 
-## Try it
-- Open the live demo: https://trustbank-co.vercel.app/
-- Demo credentials: Email: Howardwoods7@gmail.com / Password: DemoPass123
-- Note: These credentials are publicly visible in this README.
-
 ## 🛠️ Setup & Deployment Instructions
 
 ### Frontend Deployment
@@ -45,8 +46,6 @@ npm run build
 npm run start
 ```
 *Note: The start command uses `vite preview` with `$PORT` binding for compatibility with cloud hosts.*
-
-Live demo: [TrustBankCo — Production](https://trustbank-co.vercel.app/)
 
 ### Backend Deployment
 Run the following commands in the `trustbankco-backend` directory (if separate) or `backend` folder:
@@ -74,7 +73,7 @@ src/
  ├── constants.ts      # Mock Data & Configuration
  ├── App.tsx           # Main Router & State
  └── index.tsx         # Entry Point
- backend/
+backend/
  ├── prisma/           # Database Schema (schema.prisma)
  └── package.json      # Backend Dependencies
 ```
