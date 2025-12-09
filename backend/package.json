@@ -1,0 +1,26 @@
+{
+  "name": "trustbank-backend",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "prisma migrate deploy",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^5.10.2",
+    "@prisma/client": "^5.10.2",
+    "ioredis": "^5.3.2",
+    "speakeasy": "^2.0.0",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "ts-node": "^10.9.2"
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, CheckCircle2, ShieldCheck, Globe, Smartphone, ArrowRightLeft, Plus, XCircle, Landmark, ScanFace, CheckCircle } from 'lucide-react';
+import { Send, CheckCircle2, ShieldCheck, Globe, Smartphone, ArrowRightLeft, Plus, XCircle, Landmark, ScanFace, CheckCircle, QrCode } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_LINKED_ACCOUNTS } from '../constants';
 import { Account } from '../types';
@@ -17,9 +17,8 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [timer, setTimer] = useState(30);
   const [isBiometricVerified, setIsBiometricVerified] = useState(false);
-  const [isResending, setIsResending] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   
   // Progress Logic
   const [progressStages, setProgressStages] = useState<string[]>([]);
@@ -38,6 +37,12 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
     }
   }, [accounts, fromAccount]);
 
+  // Check 2FA Status on mount
+  useEffect(() => {
+    const enabled = localStorage.getItem('trustbank_2fa') === 'true';
+    setIs2FAEnabled(enabled);
+  }, []);
+
   // Focus logic for OTP
   useEffect(() => {
     if (step === 3) {
@@ -46,17 +51,6 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
       }, 100);
     }
   }, [step]);
-
-  // Timer logic
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (step === 3 && timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [step, timer]);
 
   // Biometric Scan Logic
   useEffect(() => {
@@ -68,7 +62,6 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
         setIsBiometricVerified(true);
         transitionTimer = setTimeout(() => {
           setStep(3);
-          setTimer(30);
         }, 1500);
       }, 2500);
     }
@@ -90,10 +83,16 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
   const handleOtpVerification = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 1. Validate OTP presence (Simulation)
+    // 1. Validate OTP presence
     if (otp.some(d => d === '')) {
-       alert("Invalid OTP – Please enter the complete 6-digit code.");
+       alert("Invalid Code – Please enter the complete 6-digit code.");
        return;
+    }
+
+    // If we are in setup mode (2FA was disabled), enable it now
+    if (!is2FAEnabled) {
+      localStorage.setItem('trustbank_2fa', 'true');
+      setIs2FAEnabled(true);
     }
 
     // Move to Processing View
@@ -170,16 +169,6 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
     }
   };
 
-  const handleResend = () => {
-    setIsResending(true);
-    setTimeout(() => {
-      setTimer(30);
-      setIsResending(false);
-    }, 1500);
-  };
-
-  // --- RENDER HELPERS ---
-
   const renderTabButton = (type: TransferType, label: string, Icon: React.ElementType) => (
     <button
       onClick={() => { setActiveTab(type); setStep(1); }}
@@ -193,8 +182,6 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
       <span className="text-xs font-bold uppercase tracking-wider">{label}</span>
     </button>
   );
-
-  // --- STEPS RENDER ---
 
   // STEP 5: Success Receipt
   if (step === 5) {
@@ -240,16 +227,12 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
             <h2 className="text-2xl font-bold text-white mb-6 font-bank text-center">Processing Request</h2>
             
             <div className="space-y-4">
-                {/* Static List of Steps for Reference */}
                 {["Sending...", "System Verification...", "Processing...", "Processed", "✅ Approved"].map((stageLabel, idx) => {
                     const isCompleted = progressStages.includes(stageLabel);
                     const isCurrent = !isCompleted && (progressStages.length === idx);
-                    const isError = transferError && idx === progressStages.length; // Approximate error position
+                    const isError = transferError && idx === progressStages.length;
 
-                    // Special case for error display overriding the current step
-                    if (isError && idx === 2) { // Error happens after Verification (idx 1)
-                        return null; 
-                    }
+                    if (isError && idx === 2) return null; 
 
                     return (
                         <div key={idx} className={`flex items-center space-x-3 p-3 rounded-lg border transition-all duration-500 ${isCompleted ? 'bg-slate-800/50 border-orange-500/30' : 'border-transparent'}`}>
@@ -267,7 +250,6 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
                     );
                 })}
 
-                {/* Error State */}
                 {transferError && (
                     <div className="flex items-center space-x-3 p-4 rounded-lg bg-red-900/10 border border-red-500/50 animate-in shake">
                         <XCircle className="w-6 h-6 text-red-500" />
@@ -288,17 +270,44 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
       );
   }
 
-  // STEP 3: OTP Input
+  // STEP 3: OTP Input (Combined Setup or Verify)
   if (step === 3) {
     return (
       <div className="max-w-md mx-auto mt-10 bg-slate-900 p-8 rounded-2xl shadow-xl border border-slate-800 animate-in slide-in-from-right duration-300">
         <div className="text-center mb-8">
            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-700">
-              <ShieldCheck className="w-8 h-8 text-orange-500" />
+              {is2FAEnabled ? (
+                <ShieldCheck className="w-8 h-8 text-orange-500" />
+              ) : (
+                <QrCode className="w-8 h-8 text-orange-500" />
+              )}
            </div>
-           <h2 className="text-2xl font-bold text-white mb-2 font-bank">Final Authorization</h2>
-           <p className="text-slate-400 text-sm">Enter the 6-digit OTP code sent to your secure device.</p>
+           <h2 className="text-2xl font-bold text-white mb-2 font-bank">
+             {is2FAEnabled ? 'Authenticator Verification' : 'Setup Security'}
+           </h2>
+           <p className="text-slate-400 text-sm">
+             {is2FAEnabled 
+               ? <span>Open your <span className="text-white font-bold">Google Authenticator</span> app and enter the 6-digit code.</span>
+               : <span>To secure this transaction, please scan this code with <span className="text-white font-bold">Google Authenticator</span>.</span>
+             }
+           </p>
         </div>
+
+        {/* QR Code Generator Display (Only if 2FA NOT enabled) */}
+        {!is2FAEnabled && (
+          <div className="flex flex-col items-center justify-center mb-8 animate-in zoom-in duration-300">
+             <div className="bg-white p-3 rounded-xl shadow-lg border-4 border-slate-800">
+               <img 
+                 src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=otpauth://totp/TrustBank:howard.woods@trustbank.com?secret=JBSWY3DPEHPK3PXP&issuer=TrustBank" 
+                 alt="QR Code" 
+                 className="w-32 h-32"
+               />
+             </div>
+             <p className="text-xs text-slate-500 mt-4 font-mono bg-slate-950 px-3 py-1 rounded border border-slate-800">
+               Secret: JBSW Y3DP EHPK 3PXP
+             </p>
+          </div>
+        )}
 
         <form onSubmit={handleOtpVerification}>
           <div className="flex justify-center gap-2 mb-8" onPaste={handleOtpPaste}>
@@ -311,6 +320,7 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
+                placeholder={!is2FAEnabled ? "-" : ""}
                 className="w-12 h-14 bg-slate-950 border border-slate-700 rounded-lg text-center text-2xl font-bold text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/50 outline-none transition-all"
               />
             ))}
@@ -321,18 +331,14 @@ const Transfer: React.FC<TransferProps> = ({ accounts, onTransferSuccess }) => {
             disabled={isLoading || otp.some(d => d === '')}
             className="w-full bg-orange-600 text-white py-4 rounded-xl text-lg font-bold hover:bg-orange-700 transition flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-900/20 mb-4"
           >
-            {isLoading ? <span>Verifying...</span> : <span>Confirm Transfer</span>}
+            {isLoading ? <span>Verifying...</span> : <span>{is2FAEnabled ? 'Confirm Transfer' : 'Verify & Enable'}</span>}
           </button>
         </form>
 
         <div className="text-center">
-            {timer > 0 ? (
-              <span className="text-slate-500 font-mono text-sm">Resend in {timer}s</span>
-            ) : (
-              <button onClick={handleResend} disabled={isResending} className="text-orange-400 font-bold text-sm">
-                {isResending ? 'Sending...' : 'Resend Code'}
-              </button>
-            )}
+            <p className="text-slate-600 text-xs">
+              {is2FAEnabled ? 'Secure transfer initialized. TOTP code required.' : 'Setup is required once to secure all future transfers.'}
+            </p>
         </div>
       </div>
     );

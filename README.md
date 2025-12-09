@@ -21,34 +21,31 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 
 ### 🔐 Security & Architecture
 - **Authentication**: Simulated JWT-based login flow.
+- **2FA Integration**: Google Authenticator (TOTP) support with inline QR code generation.
 - **Session Management**: Auto-timeout and secure routing (simulated).
-- **Tech Stack**: React 19, TypeScript, Tailwind CSS, Lucide Icons, Recharts.
+- **Tech Stack**: React 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts.
 
-## 🛠️ Setup & Installation
+## 🛠️ Setup & Deployment Instructions
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/trustbank-frontend.git
-   cd trustbank-frontend
-   ```
+### Frontend Deployment
+Run the following commands in the root directory (or `trustbank-frontend` context):
 
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+cd trustbank-frontend
+npm run build
+npm run start
+```
+*Note: The start command uses `vite preview` with `$PORT` binding for compatibility with cloud hosts.*
 
-3. **Configure Environment**
-   Create a `.env` file in the root:
-   ```env
-   # API Key is injected by the runtime in this demo, 
-   # but for local dev:
-   VITE_GEMINI_API_KEY=your_api_key_here
-   ```
+### Backend Deployment
+Run the following commands in the `trustbank-backend` directory (if separate) or `backend` folder:
 
-4. **Run Development Server**
-   ```bash
-   npm run dev
-   ```
+```bash
+cd trustbank-backend
+npm run build
+npm run postbuild
+npm run start
+```
 
 ## 🎨 Design System
 
@@ -60,12 +57,15 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 
 ```
 src/
- ├── components/       # UI Components (Dashboard, Layout, Transactions)
+ ├── components/       # UI Components (Dashboard, Layout, Transactions, Settings)
  ├── services/         # API Integrations (Gemini AI)
  ├── types.ts          # TypeScript Definitions
  ├── constants.ts      # Mock Data & Configuration
  ├── App.tsx           # Main Router & State
  └── index.tsx         # Entry Point
+backend/
+ ├── prisma/           # Database Schema (schema.prisma)
+ └── package.json      # Backend Dependencies
 ```
 
 ---
