@@ -1,0 +1,5 @@
+{
+  "name": "TrustBank Frontend",
+  "description": "A modern banking dashboard featuring transaction tracking, money transfers, and an AI-powered financial advisor.",
+  "requestFramePermissions": []
+}
