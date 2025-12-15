@@ -8,9 +8,7 @@ A high-performance, secure, and aesthetically polished banking dashboard designe
 
 **Live URL:** [https://trustbank-co.vercel.app/](https://trustbank-co.vercel.app/)
 
-To experience the full dashboard persona:
-*   **User ID:** `hwoods7@gmail.com`
-*   **Password:** `Jenny12345`
+
 
 ## ✨ Features
 
